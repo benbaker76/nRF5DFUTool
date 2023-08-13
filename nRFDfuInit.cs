@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace nRF5DFUTool
 {
-    public class DfuInit
+    public class nRFDfuInit
     {
         public enum dfu_action_t
         {

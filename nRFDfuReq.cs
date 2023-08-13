@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace nRF5DFUTool
 {
-    public class DfuReq
+    public class nRFDfuReq
     {
         public const int GATT_HEADER_LEN = 3;
         public const int NRF_SDH_BLE_GATT_MAX_MTU_SIZE = 23;

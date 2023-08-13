@@ -8,7 +8,6 @@
 
 namespace nRF5DFUTool
 {
-
     [global::ProtoBuf.ProtoContract()]
     public partial class Hash : global::ProtoBuf.IExtensible
     {

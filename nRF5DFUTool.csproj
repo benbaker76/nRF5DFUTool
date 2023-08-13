@@ -143,9 +143,9 @@
     <Compile Include="BLEDevice.cs" />
     <Compile Include="BLEDeviceWatcher.cs" />
     <Compile Include="Crc32.cs" />
-    <Compile Include="Dfu.cs" />
-    <Compile Include="DfuInit.cs" />
-    <Compile Include="DfuReq.cs" />
+    <Compile Include="nRFDfu.cs" />
+    <Compile Include="nRFDfuInit.cs" />
+    <Compile Include="nRFDfuReq.cs" />
     <Compile Include="ExecutionMode.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>

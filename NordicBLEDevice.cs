@@ -77,7 +77,7 @@ namespace nRF5DFUTool
         private ushort m_prnCount = 0;
         private ushort m_prnIndex = 0;
 
-        private int m_maxPacketLength = DfuReq.MAX_DFU_PKT_LEN;
+        private int m_maxPacketLength = nRFDfuReq.MAX_DFU_PKT_LEN;
 
         private byte[] m_data = new byte[] { 0 };
         private int m_dataOffset = 0;
@@ -120,11 +120,11 @@ namespace nRF5DFUTool
             byte[] responseBytes = new byte[] { 0x01, 0x02, 0xC0, 0x08, 0x00, 0x00 };
             UInt32 value = BitConverter.ToUInt32(responseBytes, 2);
 
-            Type responseType = typeof(DfuReq.nrf_dfu_response_t);
+            Type responseType = typeof(nRFDfuReq.nrf_dfu_response_t);
             byte[] buffer = new byte[Marshal.SizeOf(responseType)];
             Array.Copy(responseBytes, 0, buffer, 0, responseBytes.Length);
             GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            DfuReq.nrf_dfu_response_t response = (DfuReq.nrf_dfu_response_t)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), responseType);
+			nRFDfuReq.nrf_dfu_response_t response = (nRFDfuReq.nrf_dfu_response_t)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), responseType);
             handle.Free();
 
             Debug.WriteLine("{0} bytes", value);
@@ -421,15 +421,15 @@ namespace nRF5DFUTool
             using (var dataReader = DataReader.FromBuffer(valueChangedArgs.CharacteristicValue))
                 dataReader.ReadBytes(responseBytes);
 
-            DfuInit.ble_dfu_buttonless_op_code_t opCode = (DfuInit.ble_dfu_buttonless_op_code_t)responseBytes[1];
-            DfuInit.ble_dfu_buttonless_rsp_code_t rspCode = (DfuInit.ble_dfu_buttonless_rsp_code_t)responseBytes[2];
+			nRFDfuInit.ble_dfu_buttonless_op_code_t opCode = (nRFDfuInit.ble_dfu_buttonless_op_code_t)responseBytes[1];
+			nRFDfuInit.ble_dfu_buttonless_rsp_code_t rspCode = (nRFDfuInit.ble_dfu_buttonless_rsp_code_t)responseBytes[2];
 
-            if (responseBytes[0] != (byte)DfuInit.ble_dfu_buttonless_op_code_t.DFU_OP_RESPONSE_CODE)
+            if (responseBytes[0] != (byte)nRFDfuInit.ble_dfu_buttonless_op_code_t.DFU_OP_RESPONSE_CODE)
             {
                 return;
             }
 
-            if (rspCode == DfuInit.ble_dfu_buttonless_rsp_code_t.DFU_RSP_SUCCESS)
+            if (rspCode == nRFDfuInit.ble_dfu_buttonless_rsp_code_t.DFU_RSP_SUCCESS)
             {
                 LogFile.WriteLine("NordicButtonlessDFUCharacteristic_OnValueChanged Success!");
             }
@@ -450,11 +450,11 @@ namespace nRF5DFUTool
             using (DataReader dataReader = DataReader.FromBuffer(valueChangedArgs.CharacteristicValue))
                 dataReader.ReadBytes(responseBytes);
 
-            Type responseType = typeof(DfuReq.nrf_dfu_response_t);
+            Type responseType = typeof(nRFDfuReq.nrf_dfu_response_t);
             byte[] buffer = new byte[Marshal.SizeOf(responseType)];
             Array.Copy(responseBytes, 0, buffer, 0, responseBytes.Length);
             GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            DfuReq.nrf_dfu_response_t response = (DfuReq.nrf_dfu_response_t)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), responseType);
+			nRFDfuReq.nrf_dfu_response_t response = (nRFDfuReq.nrf_dfu_response_t)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), responseType);
             handle.Free();
 
             LogFile.WriteLine("NordicDFUControlPointCharacteristic Response: {0}", BitConverter.ToString(responseBytes));
@@ -679,15 +679,15 @@ namespace nRF5DFUTool
             }
         }
 
-        private void ProcessFirmwareModeResponse(DfuReq.nrf_dfu_response_t response)
+        private void ProcessFirmwareModeResponse(nRFDfuReq.nrf_dfu_response_t response)
         {
-            bool success = (response.response == DfuReq.nrf_dfu_op_t.NRF_DFU_OP_RESPONSE && response.result == DfuReq.nrf_dfu_result_t.NRF_DFU_RES_CODE_SUCCESS);
+            bool success = (response.response == nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_RESPONSE && response.result == nRFDfuReq.nrf_dfu_result_t.NRF_DFU_RES_CODE_SUCCESS);
 
             FirmwareModeNode firmwareMode = m_firmwareModeList.First();
 
             switch (response.request)
             {
-                case DfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_CREATE:
+                case nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_CREATE:
                     {
                         if (firmwareMode.Mode == FirmwareMode.CreateCommand)
                             m_firmwareModeList.RemoveAt(0);
@@ -706,7 +706,7 @@ namespace nRF5DFUTool
                         }
                     }
                     break;
-                case DfuReq.nrf_dfu_op_t.NRF_DFU_OP_RECEIPT_NOTIF_SET:
+                case nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_RECEIPT_NOTIF_SET:
                     {
                         if (firmwareMode.Mode == FirmwareMode.SetPRN)
                             m_firmwareModeList.RemoveAt(0);
@@ -723,7 +723,7 @@ namespace nRF5DFUTool
                         }
                     }
                     break;
-                case DfuReq.nrf_dfu_op_t.NRF_DFU_OP_CRC_GET:
+                case nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_CRC_GET:
                     {
                         if (firmwareMode.Mode == FirmwareMode.GetCRC32)
                             m_firmwareModeList.RemoveAt(0);
@@ -763,7 +763,7 @@ namespace nRF5DFUTool
                         }
                     }
                     break;
-                case DfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_EXECUTE:
+                case nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_EXECUTE:
                     {
                         if (firmwareMode.Mode == FirmwareMode.ExecuteCommand)
                             m_firmwareModeList.RemoveAt(0);
@@ -807,7 +807,7 @@ namespace nRF5DFUTool
                         }
                     }
                     break;
-                case DfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_SELECT:
+                case nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_SELECT:
                     {
                         if (firmwareMode.Mode == FirmwareMode.SelectCommand)
                             m_firmwareModeList.RemoveAt(0);
@@ -837,13 +837,13 @@ namespace nRF5DFUTool
                         }
                     }
                     break;
-                case DfuReq.nrf_dfu_op_t.NRF_DFU_OP_MTU_GET:
+                case nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_MTU_GET:
                     {
                         if (success)
                         {
                             LogFile.WriteLine("NRF_DFU_OP_MTU_GET Success! size: {0} maxPacketLength: {1}", response.type.mtu.size, m_maxPacketLength);
 
-                            m_maxPacketLength = (response.type.mtu.size - DfuReq.GATT_HEADER_LEN);
+                            m_maxPacketLength = (response.type.mtu.size - nRFDfuReq.GATT_HEADER_LEN);
                         }
                         else
                         {

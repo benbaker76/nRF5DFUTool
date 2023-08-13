@@ -76,7 +76,7 @@ namespace nRF5DFUTool
                 using (var dataWriter = new DataWriter())
                 {
                     dataWriter.ByteOrder = ByteOrder.LittleEndian;
-                    dataWriter.WriteByte((byte)DfuInit.ble_dfu_buttonless_op_code_t.DFU_OP_SET_ADV_NAME);
+                    dataWriter.WriteByte((byte)nRFDfuInit.ble_dfu_buttonless_op_code_t.DFU_OP_SET_ADV_NAME);
                     var writeBuffer = CryptographicBuffer.ConvertStringToBinary(name, BinaryStringEncoding.Utf8);
                     dataWriter.WriteByte((byte)writeBuffer.Length);
                     dataWriter.WriteBuffer(writeBuffer);
@@ -103,7 +103,7 @@ namespace nRF5DFUTool
                 using (var dataWriter = new DataWriter())
                 {
                     dataWriter.ByteOrder = ByteOrder.LittleEndian;
-                    dataWriter.WriteByte((byte)DfuInit.ble_dfu_buttonless_op_code_t.DFU_OP_ENTER_BOOTLOADER);
+                    dataWriter.WriteByte((byte)nRFDfuInit.ble_dfu_buttonless_op_code_t.DFU_OP_ENTER_BOOTLOADER);
 
                     IBuffer buffer = dataWriter.DetachBuffer();
 
@@ -127,7 +127,7 @@ namespace nRF5DFUTool
                 using (var dataWriter = new DataWriter())
                 {
                     dataWriter.ByteOrder = ByteOrder.LittleEndian;
-                    dataWriter.WriteByte((byte)DfuReq.nrf_dfu_op_t.NRF_DFU_OP_RECEIPT_NOTIF_SET);
+                    dataWriter.WriteByte((byte)nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_RECEIPT_NOTIF_SET);
                     dataWriter.WriteUInt16(prn);
 
                     IBuffer buffer = dataWriter.DetachBuffer();
@@ -152,7 +152,7 @@ namespace nRF5DFUTool
                 using (var dataWriter = new DataWriter())
                 {
                     dataWriter.ByteOrder = ByteOrder.LittleEndian;
-                    dataWriter.WriteByte((byte)DfuReq.nrf_dfu_op_t.NRF_DFU_OP_MTU_GET);
+                    dataWriter.WriteByte((byte)nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_MTU_GET);
 
                     IBuffer buffer = dataWriter.DetachBuffer();
 
@@ -176,8 +176,8 @@ namespace nRF5DFUTool
                 using (var dataWriter = new DataWriter())
                 {
                     dataWriter.ByteOrder = ByteOrder.LittleEndian;
-                    dataWriter.WriteByte((byte)DfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_SELECT);
-                    dataWriter.WriteByte((byte)(firmwareType == FirmwareType.InitPacket ? DfuReq.nrf_dfu_obj_type_t.NRF_DFU_OBJ_TYPE_COMMAND : DfuReq.nrf_dfu_obj_type_t.NRF_DFU_OBJ_TYPE_DATA));
+                    dataWriter.WriteByte((byte)nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_SELECT);
+                    dataWriter.WriteByte((byte)(firmwareType == FirmwareType.InitPacket ? nRFDfuReq.nrf_dfu_obj_type_t.NRF_DFU_OBJ_TYPE_COMMAND : nRFDfuReq.nrf_dfu_obj_type_t.NRF_DFU_OBJ_TYPE_DATA));
 
                     IBuffer buffer = dataWriter.DetachBuffer();
 
@@ -201,8 +201,8 @@ namespace nRF5DFUTool
                 using (var dataWriter = new DataWriter())
                 {
                     dataWriter.ByteOrder = ByteOrder.LittleEndian;
-                    dataWriter.WriteByte((byte)DfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_CREATE);
-                    dataWriter.WriteByte((byte)(firmwareType == FirmwareType.InitPacket ? DfuReq.nrf_dfu_obj_type_t.NRF_DFU_OBJ_TYPE_COMMAND : DfuReq.nrf_dfu_obj_type_t.NRF_DFU_OBJ_TYPE_DATA));
+                    dataWriter.WriteByte((byte)nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_CREATE);
+                    dataWriter.WriteByte((byte)(firmwareType == FirmwareType.InitPacket ? nRFDfuReq.nrf_dfu_obj_type_t.NRF_DFU_OBJ_TYPE_COMMAND : nRFDfuReq.nrf_dfu_obj_type_t.NRF_DFU_OBJ_TYPE_DATA));
                     dataWriter.WriteUInt32((uint)Math.Min(maxSize, data.Length));
 
                     IBuffer buffer = dataWriter.DetachBuffer();
@@ -227,7 +227,7 @@ namespace nRF5DFUTool
                 using (var dataWriter = new DataWriter())
                 {
                     dataWriter.ByteOrder = ByteOrder.LittleEndian;
-                    dataWriter.WriteByte((byte)DfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_EXECUTE);
+                    dataWriter.WriteByte((byte)nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_OBJECT_EXECUTE);
 
                     IBuffer buffer = dataWriter.DetachBuffer();
 
@@ -251,7 +251,7 @@ namespace nRF5DFUTool
                 using (var dataWriter = new DataWriter())
                 {
                     dataWriter.ByteOrder = ByteOrder.LittleEndian;
-                    dataWriter.WriteByte((byte)DfuReq.nrf_dfu_op_t.NRF_DFU_OP_CRC_GET);
+                    dataWriter.WriteByte((byte)nRFDfuReq.nrf_dfu_op_t.NRF_DFU_OP_CRC_GET);
 
                     IBuffer buffer = dataWriter.DetachBuffer();
 
@@ -288,9 +288,9 @@ namespace nRF5DFUTool
             return false;
         }
 
-        public static string GetResponseErrorString(DfuReq.nrf_dfu_response_t response)
+        public static string GetResponseErrorString(nRFDfuReq.nrf_dfu_response_t response)
         {
-            return (response.result == DfuReq.nrf_dfu_result_t.NRF_DFU_RES_CODE_EXT_ERROR ? response.ext_error.ToString() : response.result.ToString());
+            return (response.result == nRFDfuReq.nrf_dfu_result_t.NRF_DFU_RES_CODE_EXT_ERROR ? response.ext_error.ToString() : response.result.ToString());
         }
 
         public static bool TryOpenAppDfuPackage(string appDFUPackagePath, out List<FirmwareNode> firmwareList)
