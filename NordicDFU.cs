@@ -1,9 +1,8 @@
-﻿// * ----------------------------------------------------------------------------
-// * Author: Ben Baker
-// * Website: baker76.com
-// * E-Mail: ben@baker76.com
-// * Copyright (C) 2020 Ben Baker. All Rights Reserved.
-// * ----------------------------------------------------------------------------
+﻿// Copyright (c) 2020, Ben Baker
+// All rights reserved.
+// 
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree. 
 
 using System;
 using System.Collections.Generic;
